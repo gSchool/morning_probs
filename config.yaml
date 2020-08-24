@@ -1,0 +1,15 @@
+---
+Title: SQL Problems
+Standards:
+  -
+    Title: Taxi SQL Problems
+    UID: fd8de92c-3250-490b-8159-1daf917f9f44
+    Description: SQL Problem - Taxi database
+    SuccessCriteria:
+      - Solve SQL challenges
+    ContentFiles:
+      -
+        Type: Lesson
+        UID: 3b0abc3f-4b7d-456b-bcf7-869f32a87a55
+        Path: /challenges/questions.md
+        Autoscore: true
