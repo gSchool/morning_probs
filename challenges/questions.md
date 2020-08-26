@@ -312,21 +312,24 @@ Return all the original columns as well as a new column called 'duration' that c
 ##### !placeholder
 
 ```sql
-SELECT *
-CASE 
-	WHEN trip_distance > 15 THEN 'Long'
-	ELSE 'Short'
-END duration
+SELECT 
+  *,
+  CASE 
+	  WHEN trip_distance > 15 THEN 'Long'
+	  ELSE 'Short'
+  END duration
+FROM taxi_trips
 ```
 
 ##### !end-placeholder
 
 ##### !tests
-SELECT * 
-CASE 
-	WHEN trip_distance  > 15 THEN 'Long'
-	ELSE 'Short'
-END duration
+SELECT 
+  *,
+  CASE 
+	  WHEN trip_distance > 15 THEN 'Long'
+	  ELSE 'Short'
+  END duration
 FROM taxi_trips
 
 ##### !end-tests
@@ -339,11 +342,12 @@ Don't forget the END in your CASE WHEN
 
 #### !explanation
 ```sql
-SELECT *
-CASE 
-	WHEN trip_distance  > 15 THEN 'Long'
-	ELSE 'Short'
-END duration
+SELECT 
+  *,
+  CASE 
+	  WHEN trip_distance > 15 THEN 'Long'
+	  ELSE 'Short'
+  END duration
 FROM taxi_trips
 ```
 #### !end-explanation
