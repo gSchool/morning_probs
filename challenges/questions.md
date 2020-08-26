@@ -46,7 +46,8 @@ Return the average distance traveled per trip by each of the vendors in taxi_tri
 ##### !placeholder
 
 ```sql
-
+Select vendor_id, round(avg(trip_distance),2) from taxi_trips
+group by vendor_id;
 ```
 
 ##### !end-placeholder
@@ -90,7 +91,9 @@ Using pickup and dropoff times to calculate the length of time of each trip, as 
 ##### !placeholder
 
 ```sql
-
+Select round((trip_distance / extract(epoch from (tpep_dropoff_datetime - tpep_pickup_datetime))*3600)::numeric,2) as mph
+from taxi_trips
+where trip_distance !=0 and extract(epoch from (tpep_dropoff_datetime - tpep_pickup_datetime)) !=0;
 ```
 
 ##### !end-placeholder
@@ -144,7 +147,9 @@ Calculate the average cost per rider for all trips where there was more than 1 r
 ##### !placeholder
 
 ```sql
-
+Select round(avg(total_amount / passenger_count),2)
+from taxi_trips
+where passenger_count>1;
 ```
 
 ##### !end-placeholder
@@ -189,7 +194,11 @@ Find the highest tip percentage (use fare amount as denominator) for each rate c
 ##### !placeholder
 
 ```sql
-
+Select rate_code_id, max(tip_amount/fare_amount)
+from taxi_trips
+where fare_amount !=0
+group by rate_code_id
+order by rate_code_id
 ```
 
 ##### !end-placeholder
@@ -238,7 +247,14 @@ Return all columns for the trips that had the highest tip percentage in their ra
 ##### !placeholder
 
 ```sql
-
+Select a.* from taxi_trips a
+inner join (Select rate_code_id, max(tip_amount/fare_amount) as high
+			from taxi_trips
+			where fare_amount !=0
+			group by rate_code_id) b
+on b.rate_code_id = a.rate_code_id
+and b.high = a.tip_amount/a.fare_amount
+where fare_amount !=0;
 ```
 
 ##### !end-placeholder
@@ -296,7 +312,11 @@ Return all the original columns as well as a new column called 'duration' that c
 ##### !placeholder
 
 ```sql
-
+Select *, 
+case 
+	when trip_distance >15 THEN 'Long'
+	ELSE 'Short'
+end duration
 ```
 
 ##### !end-placeholder
@@ -348,7 +368,10 @@ Find the total revenues by rate_code_id for each vendor. Order by vendor ascendi
 ##### !placeholder
 
 ```sql
-
+Select vendor_id, rate_code_id, sum(fare_amount)
+from taxi_trips
+group by vendor_id, rate_code_id
+order by vendor_id, sum(fare_amount) desc
 ```
 
 ##### !end-placeholder
@@ -393,7 +416,8 @@ Return all trip information from trips that had a higher than average fare amoun
 ##### !placeholder
 
 ```sql
-
+Select * from taxi_trips
+where fare_amount > (Select avg(fare_amount) from taxi_trips)
 ```
 
 ##### !end-placeholder
@@ -434,7 +458,9 @@ Return all trips that had a fare amount within 10pct of the average fare amount 
 ##### !placeholder
 
 ```sql
-
+Select * from taxi_trips
+where fare_amount between (Select avg(fare_amount)*.9 from taxi_trips) 
+and (Select avg(fare_amount)*1.1 from taxi_trips)
 ```
 
 ##### !end-placeholder
@@ -477,7 +503,10 @@ Return 3 columns for each trip: the fare_amount, the payment_type, and the sum o
 ##### !placeholder
 
 ```sql
-
+SELECT fare_amount, payment_type,
+       SUM(fare_amount) OVER
+         (PARTITION BY payment_type ORDER BY payment_type desc)
+FROM taxi_trips
 ```
 
 ##### !end-placeholder
