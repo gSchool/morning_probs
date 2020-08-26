@@ -40,21 +40,23 @@ CREATE TABLE taxi_trips (
 
 
 ##### !question
-Return the average distance traveled per trip by each of the vendors in taxi_trips. Round your answers to 2 decimals.
+Return the average distance traveled per trip by each of the vendors in taxi_trips. Round your answers to 2 decimals. Order by vendor_id.
 ##### !end-question
 
 ##### !placeholder
 
 ```sql
 SELECT vendor_id, ROUND(AVG(trip_distance),2) FROM taxi_trips
-GROUP BY vendor_id;
+GROUP BY vendor_id
+ORDER BY vendor_id;
 ```
 
 ##### !end-placeholder
 
 ##### !tests
 SELECT vendor_id, ROUND(AVG(trip_distance),2) FROM taxi_trips
-GROUP BY vendor_id;
+GROUP BY vendor_id
+ORDER BY vendor_id;
 ##### !end-tests
 
 
@@ -66,7 +68,8 @@ GROUP BY vendor
 #### !explanation
 ```sql
 SELECT vendor_id, ROUND(AVG(trip_distance),2) FROM taxi_trips
-GROUP BY vendor_id;
+GROUP BY vendor_id
+ORDER BY vendor_id;
 ```
 #### !end-explanation
 
@@ -85,7 +88,7 @@ GROUP BY vendor_id;
 
 
 ##### !question
-Using pickup and dropoff times to calculate the length of time of each trip, as well as the distance traveled, calculate and return the speed of the driver in MPH for each trip, rounded to 2 decimal places. Exclude rows WHERE time or distance is 0. Only 1 column is returned.
+Calculate the speed of the driver in MPH for each trip, rounded to 2 decimal places. You will need to use the pickup and dropoff times to figure out the length of time of each trip. You will also need the distance traveled. Exclude rows WHERE time or distance is 0. 
 ##### !end-question
 
 ##### !placeholder
@@ -93,7 +96,8 @@ Using pickup and dropoff times to calculate the length of time of each trip, as 
 ```sql
 SELECT ROUND((trip_distance / EXTRACT(epoch FROM (tpep_dropoff_datetime - tpep_pickup_datetime))*3600)::numeric,2) AS mph
 FROM taxi_trips
-WHERE trip_distance != 0 AND EXTRACT(epoch FROM (tpep_dropoff_datetime - tpep_pickup_datetime)) != 0;
+WHERE trip_distance != 0 AND EXTRACT(epoch FROM (tpep_dropoff_datetime - tpep_pickup_datetime)) != 0
+ORDER BY mph;
 ```
 
 ##### !end-placeholder
@@ -101,7 +105,8 @@ WHERE trip_distance != 0 AND EXTRACT(epoch FROM (tpep_dropoff_datetime - tpep_pi
 ##### !tests
 SELECT ROUND((trip_distance / EXTRACT(epoch FROM (tpep_dropoff_datetime - tpep_pickup_datetime))*3600)::numeric,2) AS mph
 FROM taxi_trips
-WHERE trip_distance != 0 AND EXTRACT(epoch FROM (tpep_dropoff_datetime - tpep_pickup_datetime)) != 0;
+WHERE trip_distance != 0 AND EXTRACT(epoch FROM (tpep_dropoff_datetime - tpep_pickup_datetime)) != 0
+ORDER BY mph;
 
 ##### !end-tests
 
@@ -123,6 +128,7 @@ You'll need to cast your double precision data to numeric before rounding. The s
 SELECT ROUND((trip_distance / EXTRACT(epoch FROM (tpep_dropoff_datetime - tpep_pickup_datetime))*3600)::numeric,2) AS mph
 FROM taxi_trips
 WHERE trip_distance != 0 AND EXTRACT(epoch FROM (tpep_dropoff_datetime - tpep_pickup_datetime)) != 0
+ORDER BY mph;
 ```
 #### !end-explanation
 
@@ -141,7 +147,7 @@ WHERE trip_distance != 0 AND EXTRACT(epoch FROM (tpep_dropoff_datetime - tpep_pi
 
 
 ##### !question
-Calculate the average cost per rider for all trips WHERE there was more than 1 rider. Round the answer to 2 decimal places (the answer is one average for all riders on these trips)
+Calculate the average cost per rider for all trips where there was more than 1 rider. Round the answer to 2 decimal places (the answer is one average for all riders on these trips)
 ##### !end-question
 
 ##### !placeholder
@@ -188,13 +194,15 @@ WHERE passenger_count > 1
 
 
 ##### !question
-Find the highest tip percentage (use fare amount AS denominator) for each rate code, order by rate_code ascending. Return rate_code_id and the percentage.	
+Find the highest tip percentage (use fare amount AS denominator) for each rate code, order by rate_code. Return rate_code_id and the percentage rounded to two decimal points.	
 ##### !end-question
 
 ##### !placeholder
 
 ```sql
-SELECT rate_code_id, MAX(tip_amount/fare_amount)
+SELECT 
+    rate_code_id, 
+    ROUND(MAX(tip_amount/fare_amount)*100, 2) AS MAX_TIP_PERCENTAGE
 FROM taxi_trips
 WHERE fare_amount != 0
 GROUP BY rate_code_id
@@ -204,7 +212,9 @@ ORDER BY rate_code_id
 ##### !end-placeholder
 
 ##### !tests
-SELECT rate_code_id, MAX(tip_amount/fare_amount)
+SELECT 
+    rate_code_id, 
+    ROUND(MAX(tip_amount/fare_amount)*100, 2) AS MAX_TIP_PERCENTAGE
 FROM taxi_trips
 WHERE fare_amount != 0
 GROUP BY rate_code_id
@@ -219,7 +229,9 @@ WHERE fare amount is not 0
 
 #### !explanation
 ```sql
-SELECT rate_code_id, MAX(tip_amount/fare_amount)
+SELECT 
+    rate_code_id, 
+    ROUND(MAX(tip_amount/fare_amount)*100, 2) AS MAX_TIP_PERCENTAGE
 FROM taxi_trips
 WHERE fare_amount != 0
 GROUP BY rate_code_id
@@ -241,20 +253,21 @@ ORDER BY rate_code_id
 
 
 ##### !question
-Return all columns for the trips that had the highest tip percentage in their rate code AS found above
+Return all columns for the trips that had the highest tip percentage in their rate code AS found above. Order by rate code.
 ##### !end-question
 
 ##### !placeholder
 
 ```sql
-SELECT a.* FROM taxi_trips a
-inner join (SELECT rate_code_id, MAX(tip_amount/fare_amount) AS high
+SELECT a.* FROM taxi_trips AS a
+INNER JOIN (SELECT rate_code_id, MAX(tip_amount/fare_amount) AS high
 			FROM taxi_trips
 			WHERE fare_amount != 0
-			GROUP BY rate_code_id) b
+			GROUP BY rate_code_id) AS b
 ON b.rate_code_id = a.rate_code_id
 AND b.high = a.tip_amount/a.fare_amount
-WHERE fare_amount != 0;
+WHERE fare_amount != 0
+ORDER BY a.rate_code;
 ```
 
 ##### !end-placeholder
@@ -267,7 +280,8 @@ inner join (SELECT rate_code_id, MAX(tip_amount/fare_amount) AS high
 			GROUP BY rate_code_id) b
 on b.rate_code_id = a.rate_code_id
 AND b.high = a.tip_amount/a.fare_amount
-WHERE fare_amount != 0;
+WHERE fare_amount != 0
+ORDER BY a.rate_code;
 ##### !end-tests
 
 ### !hint
@@ -280,14 +294,15 @@ You can use table_name.* to only select columns FROM one of your tables
 
 #### !explanation
 ```sql
-SELECT a.* FROM taxi_trips a
+SELECT a.* FROM taxi_trips AS a
 inner join (SELECT rate_code_id, MAX(tip_amount/fare_amount) AS high
 			FROM taxi_trips
 			WHERE fare_amount != 0
-			GROUP BY rate_code_id) b
+			GROUP BY rate_code_id) AS b
 on b.rate_code_id = a.rate_code_id
 AND b.high = a.tip_amount/a.fare_amount
-WHERE fare_amount != 0;
+WHERE fare_amount != 0
+ORDER BY a.rate_code;
 ```
 #### !end-explanation
 
@@ -300,13 +315,13 @@ WHERE fare_amount != 0;
 * type: code-snippet
 * language: sql
 * id: b129d770-d45f-49ff-85cb-377fb2e8b99b
-* title: CASE When
+* title: CASE WHEN
 * data_path: /DATA/taxis.sql
 
 
 
 ##### !question
-Return all the original columns as well as a new column called 'duration' that contains "Long" if the trip was over 15miles, and 'Short' otherwise for each trip.
+Return all the original columns as well as a new column called 'duration' that contains "Long" if the trip was over 15miles, and 'Short' otherwise for each trip. Order by duration.
 ##### !end-question
 
 ##### !placeholder
@@ -317,8 +332,9 @@ SELECT
   CASE 
 	  WHEN trip_distance > 15 THEN 'Long'
 	  ELSE 'Short'
-  END duration
+  END AS duration
 FROM taxi_trips
+ORDER BY duration
 ```
 
 ##### !end-placeholder
@@ -329,8 +345,9 @@ SELECT
   CASE 
 	  WHEN trip_distance > 15 THEN 'Long'
 	  ELSE 'Short'
-  END duration
+  END AS duration
 FROM taxi_trips
+ORDER BY duration
 
 ##### !end-tests
 
@@ -347,8 +364,9 @@ SELECT
   CASE 
 	  WHEN trip_distance > 15 THEN 'Long'
 	  ELSE 'Short'
-  END duration
+  END AS duration
 FROM taxi_trips
+ORDER BY duration
 ```
 #### !end-explanation
 
@@ -366,16 +384,16 @@ FROM taxi_trips
 
 
 ##### !question
-Find the total revenues by rate_code_id for each vendor. Order by vendor ascending and total revenues descending (Columns should be vendor, rate_code, revenues)
+Find the total revenues by rate_code_id for each vendor. Order by vendor id ascending and total revenues descending (Columns should be vendor, rate_code, revenues)
 ##### !end-question
 
 ##### !placeholder
 
 ```sql
-SELECT vendor_id, rate_code_id, SUM(fare_amount)
+SELECT vendor_id, rate_code_id, SUM(fare_amount) AS total_revenues
 FROM taxi_trips
 GROUP BY vendor_id, rate_code_id
-order by vendor_id, SUM(fare_amount) DESC
+ORDER BY 1,3 DESC
 ```
 
 ##### !end-placeholder
@@ -384,7 +402,7 @@ order by vendor_id, SUM(fare_amount) DESC
 SELECT vendor_id, rate_code_id, SUM(fare_amount)
 FROM taxi_trips
 GROUP BY vendor_id, rate_code_id
-order by vendor_id, SUM(fare_amount) DESC
+ORDER BY 1,3 DESC
 ##### !end-tests
 
 
@@ -397,7 +415,7 @@ order by vendor_id, SUM(fare_amount) DESC
 SELECT vendor_id, rate_code_id, SUM(fare_amount)
 FROM taxi_trips
 GROUP BY vendor_id, rate_code_id
-order by vendor_id, SUM(fare_amount) DESC
+ORDER BY 1,3 DESC
 ```
 #### !end-explanation
 
@@ -414,7 +432,7 @@ order by vendor_id, SUM(fare_amount) DESC
 
 
 ##### !question
-Return all trip information FROM trips that had a higher than average fare amount
+Return all trip information from trips that had a higher than average fare amount. Order by fare amount descending
 ##### !end-question
 
 ##### !placeholder
@@ -422,6 +440,7 @@ Return all trip information FROM trips that had a higher than average fare amoun
 ```sql
 SELECT * FROM taxi_trips
 WHERE fare_amount > (SELECT AVG(fare_amount) FROM taxi_trips)
+ORDER BY fare_amount DESC
 ```
 
 ##### !end-placeholder
@@ -429,6 +448,7 @@ WHERE fare_amount > (SELECT AVG(fare_amount) FROM taxi_trips)
 ##### !tests
 SELECT * FROM taxi_trips
 WHERE fare_amount > (SELECT AVG(fare_amount) FROM taxi_trips)
+ORDER BY fare_amount DESC
 ##### !end-tests
 
 
@@ -440,6 +460,7 @@ WHERE fare_amount > (SELECT AVG(fare_amount) FROM taxi_trips)
 ```sql
 SELECT * FROM taxi_trips
 WHERE fare_amount > (SELECT AVG(fare_amount) FROM taxi_trips)
+ORDER BY fare_amount DESC
 ```
 #### !end-explanation
 
@@ -465,6 +486,7 @@ Return all trips that had a fare amount within 10pct of the average fare amount 
 SELECT * FROM taxi_trips
 WHERE fare_amount between (SELECT AVG(fare_amount)*.9 FROM taxi_trips) 
 AND (SELECT AVG(fare_amount)*1.1 FROM taxi_trips)
+ORDER BY fare_amount DESC
 ```
 
 ##### !end-placeholder
@@ -473,6 +495,7 @@ AND (SELECT AVG(fare_amount)*1.1 FROM taxi_trips)
 SELECT * FROM taxi_trips
 WHERE fare_amount between (SELECT AVG(fare_amount)*.9 FROM taxi_trips) 
 AND (SELECT AVG(fare_amount)*1.1 FROM taxi_trips)
+ORDER BY fare_amount DESC
 ##### !end-tests
 
 
@@ -485,6 +508,7 @@ Use between
 SELECT * FROM taxi_trips
 WHERE fare_amount between (SELECT AVG(fare_amount)*.9 FROM taxi_trips) 
 AND (SELECT AVG(fare_amount)*1.1 FROM taxi_trips)
+ORDER BY fare_amount DESC
 ```
 #### !end-explanation
 
@@ -501,7 +525,7 @@ AND (SELECT AVG(fare_amount)*1.1 FROM taxi_trips)
 
 
 ##### !question
-Return 3 columns for each trip: the fare_amount, the payment_type, and the sum of all the fare_amounts for the payment type of that row. Look up the syntax for a window function (it will create a subtotal by payment_type). Order by descending payment type.
+Return 3 columns for each trip: the fare_amount, the payment_type, and the sum of all the fare_amounts for the same payment type of that row. (Look up the syntax for a window function, it will create a subtotal by payment_type). Order by payment type.
 ##### !end-question
 
 ##### !placeholder
@@ -509,7 +533,7 @@ Return 3 columns for each trip: the fare_amount, the payment_type, and the sum o
 ```sql
 SELECT fare_amount, payment_type,
        SUM(fare_amount) OVER
-         (PARTITION BY payment_type ORDER BY payment_type DESC)
+         (PARTITION BY payment_type ORDER BY payment_type)
 FROM taxi_trips
 ```
 
@@ -518,14 +542,14 @@ FROM taxi_trips
 ##### !tests
 SELECT fare_amount, payment_type,
        SUM(fare_amount) OVER
-         (PARTITION BY payment_type ORDER BY payment_type DESC)
+         (PARTITION BY payment_type ORDER BY payment_type)
 FROM taxi_trips
 ##### !end-tests
 
 
 ### !hint
        SUM(fare_amount) OVER
-         (PARTITION BY payment_type ORDER BY payment_type DESC)
+         (PARTITION BY payment_type ORDER BY payment_type)
 this should be what your window function is doing
 ### !end-hint
 
@@ -533,7 +557,7 @@ this should be what your window function is doing
 ```sql
 SELECT fare_amount, payment_type,
        SUM(fare_amount) OVER
-         (PARTITION BY payment_type ORDER BY payment_type DESC)
+         (PARTITION BY payment_type ORDER BY payment_type)
 FROM taxi_trips
 ```
 #### !end-explanation
