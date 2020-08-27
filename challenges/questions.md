@@ -259,15 +259,14 @@ Return all columns for the trips that had the highest tip percentage in their ra
 ##### !placeholder
 
 ```sql
-SELECT a.* FROM taxi_trips AS a
-INNER JOIN (SELECT rate_code_id, MAX(tip_amount/fare_amount) AS high
+SELECT a.* FROM taxi_trips a
+inner join (SELECT rate_code_id, MAX(tip_amount/fare_amount) AS high
 			FROM taxi_trips
-			WHERE fare_amount != 0
-			GROUP BY rate_code_id) AS b
-ON b.rate_code_id = a.rate_code_id
+			WHERE fare_amount !=0
+			GROUP BY rate_code_id) b
+on b.rate_code_id = a.rate_code_id
 AND b.high = a.tip_amount/a.fare_amount
-WHERE fare_amount != 0
-ORDER BY a.rate_code;
+WHERE fare_amount != 0;
 ```
 
 ##### !end-placeholder
@@ -280,8 +279,7 @@ inner join (SELECT rate_code_id, MAX(tip_amount/fare_amount) AS high
 			GROUP BY rate_code_id) b
 on b.rate_code_id = a.rate_code_id
 AND b.high = a.tip_amount/a.fare_amount
-WHERE fare_amount != 0
-ORDER BY a.rate_code;
+WHERE fare_amount != 0;
 ##### !end-tests
 
 ### !hint
@@ -294,15 +292,14 @@ You can use table_name.* to only select columns FROM one of your tables
 
 #### !explanation
 ```sql
-SELECT a.* FROM taxi_trips AS a
+SELECT a.* FROM taxi_trips a
 inner join (SELECT rate_code_id, MAX(tip_amount/fare_amount) AS high
 			FROM taxi_trips
-			WHERE fare_amount != 0
-			GROUP BY rate_code_id) AS b
+			WHERE fare_amount !=0
+			GROUP BY rate_code_id) b
 on b.rate_code_id = a.rate_code_id
 AND b.high = a.tip_amount/a.fare_amount
-WHERE fare_amount != 0
-ORDER BY a.rate_code;
+WHERE fare_amount != 0;
 ```
 #### !end-explanation
 
