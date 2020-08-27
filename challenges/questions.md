@@ -177,11 +177,12 @@ ORDER BY mph;
 Calculate the average cost per rider for all trips where there was more than 1 rider. Round the answer to 2 decimal places (the answer is one average for all riders on these trips)
 
 Your answer should look like this:
-
+```
  avg_cost 
 -------
   6.90
 (1 row)
+```
 ##### !end-question
 
 ##### !placeholder
@@ -231,7 +232,7 @@ WHERE passenger_count > 1
 Find the highest tip percentage (use fare amount AS denominator) for each rate code, order by rate_code. Return rate_code_id and the percentage rounded to two decimal points.
 
 Your answer should look like this:
-
+```
 rate_code_id | max_tip_percentage 
 --------------+--------------------
  1            |              75.00
@@ -239,6 +240,7 @@ rate_code_id | max_tip_percentage
  4            |               0.00
  5            |              20.18
 (4 rows)
+```
 ##### !end-question
 
 ##### !placeholder
@@ -300,7 +302,7 @@ ORDER BY rate_code_id
 Return all columns for the trips that had the highest tip percentage in their rate code AS found above. Order by rate code.
 
 Your answer should look like this:
-
+```
  trip_id | vendor_id |  tpep_pickup_datetime  | tpep_dropoff_datetime  | passenger_count | trip_distance |  pickup_longitude   |  pickup_latitude   | rate_code_id | store_and_fwd_flag |  dropoff_longitude  |  dropoff_latitude  | payment_type | fare_amount | extra | mta_tax | tip_amount | tolls_amount | improvement_surcharge | total_amount 
 ---------+-----------+------------------------+------------------------+-----------------+---------------+---------------------+--------------------+--------------+--------------------+---------------------+--------------------+--------------+-------------+-------+---------+------------+--------------+-----------------------+--------------
      720 | 1         | 2016-06-01 04:04:29+00 | 2016-06-01 04:07:04+00 |               2 |          0.30 | -73.990715026855470 | 40.665405273437510 | 1            | N                  | -73.987976074218750 | 40.662563323974610 | 1            |        4.00 |  0.50 |    0.50 |       3.00 |         0.00 |                  0.30 |         8.30
@@ -308,6 +310,7 @@ Your answer should look like this:
      984 | 2         | 2016-06-01 04:06:02+00 | 2016-06-01 04:45:49+00 |               1 |         25.64 | -73.862991333007810 | 40.769359588623050 | 4            | N                  | -73.769943237304670 | 41.035110473632810 | 2            |       90.50 |  0.50 |    0.50 |       0.00 |         5.54 |                  0.30 |        97.34
      818 | 1         | 2016-06-01 04:05:05+00 | 2016-06-01 04:05:25+00 |               0 |          6.20 | -73.924842834472660 | 40.766197204589844 | 5            | N                  | -73.924842834472660 | 40.766197204589844 | 1            |       27.01 |  0.00 |    0.00 |       5.45 |         0.00 |                  0.30 |        32.76
 (4 rows)
+```
 ##### !end-question
 
 ##### !placeholder
@@ -378,7 +381,7 @@ ORDER BY a.rate_code_id;
 Return all the original columns as well as a new column called 'duration' that contains "Long" if the trip was over 15miles, and 'Short' otherwise for each trip. Order by duration.
 
 Your answer should look like this:
-
+```
  trip_id | vendor_id |  tpep_pickup_datetime  | tpep_dropoff_datetime  | passenger_count | trip_distance |  pickup_longitude   |  pickup_latitude   | rate_code_id | store_and_fwd_flag |  dropoff_longitude  |  dropoff_latitude  | payment_type | fare_amount | extra | mta_tax | tip_amount | tolls_amount | improvement_surcharge | total_amount | duration 
 ---------+-----------+------------------------+------------------------+-----------------+---------------+---------------------+--------------------+--------------+--------------------+---------------------+--------------------+--------------+-------------+-------+---------+------------+--------------+-----------------------+--------------+----------
      301 | 2         | 2016-06-01 04:01:56+00 | 2016-06-01 04:34:33+00 |               1 |         21.37 | -73.782371520996100 | 40.644584655761720 | 2            | N                  | -73.979278564453120 | 40.776905059814450 | 1            |       52.00 |  0.00 |    0.50 |      11.67 |         5.54 |                  0.30 |        70.01 | Long
@@ -393,6 +396,7 @@ Your answer should look like this:
      762 | 1         | 2016-06-01 04:04:45+00 | 2016-06-01 04:29:27+00 |               1 |         17.50 | -73.802482604980480 | 40.647724151611330 | 2            | N                  | -73.948287963867200 | 40.783882141113280 | 1            |       52.00 |  0.00 |    0.50 |      10.00 |         5.54 |                  0.30 |        68.34 | Long
 ...
 (1000 rows)
+```
 ##### !end-question
 
 ##### !placeholder
@@ -457,7 +461,7 @@ ORDER BY duration
 ##### !question
 Find the total revenues by rate_code_id for each vendor. Order by vendor id ascending and total revenues descending (Columns should be vendor, rate_code, revenues)
 Your answer should look like this:
-
+```
  vendor_id | rate_code_id | total_revenues 
 -----------+--------------+----------------
  1         | 1            |        5747.00
@@ -468,7 +472,7 @@ Your answer should look like this:
  2         | 5            |         583.59
  2         | 4            |          90.50
 (7 rows)
-
+```
 ##### !end-question
 
 ##### !placeholder
@@ -518,7 +522,7 @@ ORDER BY 1,3 DESC
 ##### !question
 Return all trip information from trips that had a higher than average fare amount. Order by fare amount descending.
 Your answer should look like this:
-
+```
  trip_id | vendor_id |  tpep_pickup_datetime  | tpep_dropoff_datetime  | passenger_count | trip_distance |  pickup_longitude   |  pickup_latitude   | rate_code_id | store_and_fwd_flag |  dropoff_longitude  |  dropoff_latitude  | payment_type | fare_amount | extra | mta_tax | tip_amount | tolls_amount | improvement_surcharge | total_amount 
 ---------+-----------+------------------------+------------------------+-----------------+---------------+---------------------+--------------------+--------------+--------------------+---------------------+--------------------+--------------+-------------+-------+---------+------------+--------------+-----------------------+--------------
      508 | 2         | 2016-06-01 04:03:09+00 | 2016-06-01 04:48:41+00 |               1 |         36.42 | -73.787796020507810 | 40.643913269042970 | 5            | N                  | -73.852027893066400 | 41.047401428222656 | 1            |      163.00 |  0.00 |    0.00 |       0.00 |         5.54 |                  0.30 |       168.84
@@ -533,6 +537,7 @@ Your answer should look like this:
      429 | 1         | 2016-06-01 04:02:46+00 | 2016-06-01 04:34:00+00 |               1 |         23.70 | -73.789184570312500 | 40.647388458251950 | 1            | N                  | -74.004226684570300 | 40.650524139404300 | 1            |       62.50 |  0.50 |    0.50 |      12.75 |         0.00 |                  0.30 |        76.55
 ...
 (325 rows)
+```
 ##### !end-question
 
 ##### !placeholder
@@ -579,7 +584,7 @@ ORDER BY fare_amount DESC
 ##### !question
 Return all trips that had a fare amount within 10pct of the average fare amount for all the trips. 
 Your answer should look like this:
-
+```
  trip_id | vendor_id |  tpep_pickup_datetime  | tpep_dropoff_datetime  | passenger_count | trip_distance |  pickup_longitude   |  pickup_latitude   | rate_code_id | store_and_fwd_flag |  dropoff_longitude  |  dropoff_latitude  | payment_type | fare_amount | extra | mta_tax | tip_amount | tolls_amount | improvement_surcharge | total_amount 
 ---------+-----------+------------------------+------------------------+-----------------+---------------+---------------------+--------------------+--------------+--------------------+---------------------+--------------------+--------------+-------------+-------+---------+------------+--------------+-----------------------+--------------
      528 | 1         | 2016-06-01 04:03:20+00 | 2016-06-01 04:19:51+00 |               1 |          4.60 | -73.989151000976560 | 40.718734741210940 | 1            | N                  | -73.950752258300780 | 40.668140411376950 | 1            |       16.50 |  0.50 |    0.50 |       2.00 |         0.00 |                  0.30 |        19.80
@@ -594,6 +599,7 @@ Your answer should look like this:
      473 | 2         | 2016-06-01 04:03:00+00 | 2016-06-01 04:17:12+00 |               2 |          4.67 | -73.986152648925780 | 40.756080627441406 | 1            | N                  | -73.992301940917970 | 40.712871551513670 | 2            |       16.50 |  0.50 |    0.50 |       0.00 |         0.00 |                  0.30 |        17.80
 ...
 (90 rows)
+```
 ##### !end-question
 
 ##### !placeholder
@@ -643,7 +649,7 @@ ORDER BY fare_amount DESC
 ##### !question
 Return 3 columns for each trip: the fare_amount, the payment_type, and the sum of all the fare_amounts for the same payment type of that row. (Look up the syntax for a window function, it will create a subtotal by payment_type). Order by payment type.
 Your answer should look like this:
-
+```
  fare_amount | payment_type |   sum    
 -------------+--------------+----------
        13.00 | 1            | 10480.60
@@ -658,6 +664,7 @@ Your answer should look like this:
        13.00 | 1            | 10480.60
 ...
 (1000 rows)
+```
 ##### !end-question
 
 ##### !placeholder
