@@ -43,11 +43,13 @@ CREATE TABLE taxi_trips (
 Return the average distance traveled per trip by each of the vendors in taxi_trips. Round your answers to 2 decimals. Order by vendor_id.
 Your answer should look like this:
 
+'''
  vendor_id | round 
 -----------+-------
  1         |  3.81
  2         |  4.49
 (2 rows)
+'''
 ##### !end-question
 
 ##### !placeholder
@@ -98,7 +100,7 @@ ORDER BY vendor_id;
 Calculate the speed of the driver in MPH for each trip, rounded to 2 decimal places. You will need to use the pickup and dropoff times to figure out the length of time of each trip. You will also need the distance traveled. Exclude rows WHERE time or distance is 0. 
 
 Your answer should look like this:
-
+'''
    mph   
 ---------
     0.02
@@ -113,7 +115,7 @@ Your answer should look like this:
     4.44
 ...
 (988 rows)
-
+'''
 ##### !end-question
 
 ##### !placeholder
