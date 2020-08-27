@@ -55,9 +55,7 @@ Your answer should look like this:
 ##### !placeholder
 
 ```sql
-SELECT vendor_id, ROUND(AVG(trip_distance),2) FROM taxi_trips
-GROUP BY vendor_id
-ORDER BY vendor_id;
+
 ```
 
 ##### !end-placeholder
@@ -121,10 +119,7 @@ Your answer should look like this:
 ##### !placeholder
 
 ```sql
-SELECT ROUND((trip_distance / EXTRACT(epoch FROM (tpep_dropoff_datetime - tpep_pickup_datetime))*3600)::numeric,2) AS mph
-FROM taxi_trips
-WHERE trip_distance != 0 AND EXTRACT(epoch FROM (tpep_dropoff_datetime - tpep_pickup_datetime)) != 0
-ORDER BY mph;
+
 ```
 
 ##### !end-placeholder
@@ -188,9 +183,7 @@ Your answer should look like this:
 ##### !placeholder
 
 ```sql
-SELECT ROUND(AVG(total_amount / passenger_count),2)
-FROM taxi_trips
-WHERE passenger_count > 1;
+
 ```
 
 ##### !end-placeholder
@@ -209,9 +202,7 @@ WHERE passenger_count > 1;
 
 #### !explanation
 ```sql
-SELECT ROUND(AVG(total_amount / passenger_count),2)
-FROM taxi_trips
-WHERE passenger_count > 1
+
 ```
 #### !end-explanation
 
@@ -246,13 +237,7 @@ rate_code_id | max_tip_percentage
 ##### !placeholder
 
 ```sql
-SELECT 
-    rate_code_id, 
-    ROUND(MAX(tip_amount/fare_amount)*100, 2) AS MAX_TIP_PERCENTAGE
-FROM taxi_trips
-WHERE fare_amount != 0
-GROUP BY rate_code_id
-ORDER BY rate_code_id
+
 ```
 
 ##### !end-placeholder
@@ -316,15 +301,7 @@ Your answer should look like this:
 ##### !placeholder
 
 ```sql
-SELECT a.* FROM taxi_trips a
-inner join (SELECT rate_code_id, MAX(tip_amount/fare_amount) AS high
-			FROM taxi_trips
-			WHERE fare_amount !=0
-			GROUP BY rate_code_id) AS b
-on b.rate_code_id = a.rate_code_id
-AND b.high = a.tip_amount/a.fare_amount
-WHERE fare_amount != 0
-ORDER BY a.rate_code_id;
+
 ```
 
 ##### !end-placeholder
@@ -402,14 +379,7 @@ Your answer should look like this:
 ##### !placeholder
 
 ```sql
-SELECT 
-  *,
-  CASE 
-	  WHEN trip_distance > 15 THEN 'Long'
-	  ELSE 'Short'
-  END AS duration
-FROM taxi_trips
-ORDER BY duration
+
 ```
 
 ##### !end-placeholder
@@ -478,10 +448,7 @@ Your answer should look like this:
 ##### !placeholder
 
 ```sql
-SELECT vendor_id, rate_code_id, SUM(fare_amount) AS total_revenues
-FROM taxi_trips
-GROUP BY vendor_id, rate_code_id
-ORDER BY 1,3 DESC
+
 ```
 
 ##### !end-placeholder
@@ -543,9 +510,7 @@ Your answer should look like this:
 ##### !placeholder
 
 ```sql
-SELECT * FROM taxi_trips
-WHERE fare_amount > (SELECT AVG(fare_amount) FROM taxi_trips)
-ORDER BY fare_amount DESC
+
 ```
 
 ##### !end-placeholder
@@ -605,10 +570,7 @@ Your answer should look like this:
 ##### !placeholder
 
 ```sql
-SELECT * FROM taxi_trips
-WHERE fare_amount between (SELECT AVG(fare_amount)*.9 FROM taxi_trips) 
-AND (SELECT AVG(fare_amount)*1.1 FROM taxi_trips)
-ORDER BY fare_amount DESC
+
 ```
 
 ##### !end-placeholder
@@ -670,10 +632,7 @@ Your answer should look like this:
 ##### !placeholder
 
 ```sql
-SELECT fare_amount, payment_type,
-       SUM(fare_amount) OVER
-         (PARTITION BY payment_type ORDER BY payment_type)
-FROM taxi_trips
+
 ```
 
 ##### !end-placeholder
